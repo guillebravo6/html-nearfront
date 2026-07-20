@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Garden of Eden: Growth Proposal</title>
+<style>
+  :root {
+    --navy: #1F2A44;
+    --navy-dark: #141c30;
+    --gold: #8A6D3B;
+    --gold-light: #C9A227;
+    --green: #1E7145;
+    --red: #A13B2A;
+    --bg: #F2F0EC;
+    --card-border: #E4E1D9;
+    --text: #1A1A1A;
+    --text-muted: #6B6B6B;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 40px 24px 80px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+  }
+  .eyebrow.dark-on-light { color: var(--gold); }
+  .card-dark {
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-dark) 100%);
+    border-radius: 14px;
+    padding: 32px 36px;
+    color: #fff;
+    margin-bottom: 28px;
+  }
+  .header h1 {
+    font-size: 30px;
+    margin: 0 0 10px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .header .subtitle {
+    color: var(--gold-light);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 18px;
+  }
+  .divider-gold {
+    width: 56px;
+    height: 3px;
+    background: var(--gold-light);
+    margin: 0 0 16px;
+    border-radius: 2px;
+  }
+  .header .meta {
+    color: #B8BFCF;
+    font-size: 12.5px;
+    margin: 0;
+  }
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px 28px;
+  }
+  .stat-strip.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat .label {
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-size: 10px;
+    color: #9AA3B8;
+    font-weight: 700;
+  }
+  .stat .value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .stat .sub {
+    font-size: 11.5px;
+    color: var(--gold-light);
+    font-weight: 500;
+  }
+  .section-label {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin: 8px 0 14px;
+  }
+  .phase-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .phase-card {
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-top: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+  .phase-card.phase-2 { border-top-color: var(--navy); }
+  .phase-card.phase-3 { border-top-color: #B7B2A6; }
+  .phase-card h3 {
+    font-size: 15px;
+    margin: 0 0 10px;
+    color: var(--navy);
+  }
+  .phase-card p {
+    margin: 0;
+    color: #3a3a3a;
+    font-size: 13px;
+  }
+  .phase-card .tag {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gold);
+    background: #FBF4E5;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .phase-card.phase-2 .tag { color: var(--navy); background: #EBEEF4; }
+  .phase-card.phase-3 .tag { color: #7a7566; background: #F1EFEA; }
+
+  .gap-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .gap-card {
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .gap-card .big {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--red);
+    margin-bottom: 4px;
+  }
+  .gap-card .title {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .gap-card .desc {
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+
+  .chart-card {
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 24px 28px 12px;
+    margin-bottom: 24px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  thead th {
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 10.5px;
+    letter-spacing: 0.6px;
+    color: var(--text-muted);
+    font-weight: 700;
+    padding: 12px 16px;
+    background: #FAFAF8;
+    border-bottom: 1px solid var(--card-border);
+  }
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tr.milestone-1 td { background: #FBF4E5; }
+  tr.milestone-2 td { background: #EDF5EF; }
+  .pos { color: var(--green); font-weight: 700; }
+  .muted-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin: 10px 4px 28px;
+    line-height: 1.6;
+  }
+  .channel-name { font-weight: 700; color: var(--navy); }
+  .channel-desc { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .spend { color: var(--gold); font-weight: 700; }
+  .revenue { color: var(--green); font-weight: 700; }
+
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .tl-card {
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 16px 16px;
+  }
+  .tl-card.target { background: #FBF4E5; border-color: #E9D9AE; }
+  .tl-card.target.final { background: #EDF5EF; border-color: #BFDCC9; }
+  .tl-card .mo { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); font-weight: 700; }
+  .tl-card .headline { font-size: 14px; font-weight: 700; color: var(--navy); margin: 4px 0 8px; }
+  .tl-card .headline.gold { color: var(--gold); }
+  .tl-card .headline.green { color: var(--green); }
+  .tl-card .body { font-size: 11.5px; color: #444; line-height: 1.5; }
+
+  .note-box {
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-left: 4px solid var(--navy);
+    border-radius: 8px;
+    padding: 18px 22px;
+    font-size: 12.5px;
+    color: #3a3a3a;
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    padding-top: 12px;
+  }
+  .footer strong { color: var(--navy); }
+
+  @media (max-width: 900px) {
+    .stat-strip, .stat-strip.cols-4 { grid-template-columns: repeat(2, 1fr); }
+    .phase-grid, .gap-list, .timeline { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="card-dark header">
+    <div class="eyebrow">Nearfront: Growth Proposal</div>
+    <h1>Garden of Eden: Hayward &amp; Tracy Growth Plan</h1>
+    <p class="subtitle">$1.14M/mo combined baseline &rarr; $1.36M/mo within 6 months. $1.53M/mo within 12 months.</p>
+    <div class="divider-gold"></div>
+    <p class="meta">Prepared for Ashwin Bhagat | goe.menu | Nearfront | Guillermo Bravo</p>
+  </div>
+
+  <!-- Starting Point -->
+  <div class="section-label">Starting point (Q2 2026 actuals)</div>
+  <div class="card-dark">
+    <div class="stat-strip">
+      <div class="stat">
+        <div class="label">Combined gross sales / month</div>
+        <div class="value">$1,141,337</div>
+        <div class="sub">Treez, Apr&ndash;Jun avg</div>
+      </div>
+      <div class="stat">
+        <div class="label">Hayward / Tracy split</div>
+        <div class="value">66 / 34</div>
+        <div class="sub">$746,559 vs $394,779 /mo</div>
+      </div>
+      <div class="stat">
+        <div class="label">Tickets / month</div>
+        <div class="value">~25,339</div>
+        <div class="sub">$44.65 avg blended ticket</div>
+      </div>
+      <div class="stat">
+        <div class="label">goe.menu sessions / month</div>
+        <div class="value">~16,608</div>
+        <div class="sub">68% organic search</div>
+      </div>
+      <div class="stat">
+        <div class="label">AIQ loyalty revenue</div>
+        <div class="value">$13,882/mo</div>
+        <div class="sub">Quarterly avg, 95x ROI</div>
+      </div>
+    </div>
+    <div class="stat-strip cols-4" style="margin-top:24px;">
+      <div class="stat">
+        <div class="label">Target, 6 months</div>
+        <div class="value">$1.36M</div>
+        <div class="sub">January 2027</div>
+      </div>
+      <div class="stat">
+        <div class="label">Target, 12 months</div>
+        <div class="value">$1.53M</div>
+        <div class="sub">July 2027</div>
+      </div>
+      <div class="stat">
+        <div class="label">Locations live / pipeline</div>
+        <div class="value">2 / 2</div>
+        <div class="sub">Sunol coming soon, 4th reported</div>
+      </div>
+      <div class="stat">
+        <div class="label">Weed delivery visibility today</div>
+        <div class="value">0%</div>
+        <div class="sub">Both locations, 10-mile grid</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why SEO leads -->
+  <div class="section-label">Why SEO leads: three quantified, fixable gaps</div>
+  <div class="gap-list">
+    <div class="gap-card">
+      <div class="big">0%</div>
+      <div class="title">Weed delivery: zero visibility</div>
+      <div class="desc">0% Share of Local Voice at both stores across a 10-mile, 81-point grid. Root cause: missing GBP delivery category and an underbuilt delivery page. Real demand sitting untapped: 3,600&ndash;5,500 searches/month nationally at low-to-moderate difficulty.</div>
+    </div>
+    <div class="gap-card">
+      <div class="big">#9</div>
+      <div class="title">Tracy's organic ranking</div>
+      <div class="desc">Tracy ranks #9 for its own branded term, behind three direct competitors and Garden of Eden's own Weedmaps listing. Hayward, by contrast, ranks #1 for the same type of term. Closing this gap alone is a direct, quantifiable lift.</div>
+    </div>
+    <div class="gap-card">
+      <div class="big">DR 24</div>
+      <div class="title">Domain authority deficit</div>
+      <div class="desc">goe.menu trails every direct competitor (31&ndash;46 DR) and every national directory it overlaps with (72&ndash;94 DR). Roughly two-thirds of historical referring domains have been lost and were never rebuilt.</div>
+    </div>
+  </div>
+
+  <!-- Growth Phases -->
+  <div class="section-label">Growth phases, sequenced by priority</div>
+  <div class="phase-grid">
+    <div class="phase-card">
+      <div class="tag">Phase 1 &middot; Now</div>
+      <h3>SEO: the primary lever</h3>
+      <p>Fix the GBP delivery category gap on both listings, rebuild the delivery landing page around "dispensary delivery near me" and "dispensary delivery," bring Tracy's on-site content and links up to Hayward's standard, and launch geo-expansion pages for Sunol, Livermore, and Mountain House ahead of or alongside their delivery buildout. Backed by an authority/backlink program to close the Domain Rating gap.</p>
+    </div>
+    <div class="phase-card phase-2">
+      <div class="tag">Phase 2 &middot; Month 4+</div>
+      <h3>Google Ads &amp; programmatic</h3>
+      <p>Layer in paid search on delivery and dispensary-intent terms once the organic and GBP foundation is live, so paid captures immediate volume while SEO compounds underneath it. Programmatic retargeting follows to keep site visitors and app users in the funnel. Both channels stop competing with SEO for spend once organic is carrying its share of the load.</p>
+    </div>
+    <div class="phase-card phase-3">
+      <div class="tag">Phase 3 &middot; Month 9+, optional</div>
+      <h3>Meta ads</h3>
+      <p>Lowest priority in this plan. Meta is a brand-awareness and retargeting layer best evaluated only after Phase 1 and Phase 2 are proven and compounding on their own numbers. No spend proposed here until that checkpoint is reached.</p>
+    </div>
+  </div>
+
+  <!-- Revenue Forecast -->
+  <div class="section-label">Revenue forecast, August 2026 to July 2027</div>
+  <div class="chart-card">
+    <svg viewBox="0 0 1000 320" width="100%" height="280" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="20" x2="960" y2="20" stroke="#EDEAE2" stroke-width="1"/>
+      <line x1="60" y1="94" x2="960" y2="94" stroke="#EDEAE2" stroke-width="1"/>
+      <line x1="60" y1="169" x2="960" y2="169" stroke="#EDEAE2" stroke-width="1"/>
+      <line x1="60" y1="243" x2="960" y2="243" stroke="#EDEAE2" stroke-width="1"/>
+      <text x="10" y="24" font-size="11" fill="#9A9A9A">$1.6M</text>
+      <text x="10" y="98" font-size="11" fill="#9A9A9A">$1.4M</text>
+      <text x="10" y="173" font-size="11" fill="#9A9A9A">$1.2M</text>
+      <text x="10" y="247" font-size="11" fill="#9A9A9A">$1.0M</text>
+
+      <polygon points="60,280 60,190 160,178 260,165 360,152 460,135 560,123 660,110 760,93 860,72 960,46 960,280"
+        fill="#8A6D3B" opacity="0.12"/>
+      <polyline points="60,190 160,178 260,165 360,152 460,135 560,123 660,110 760,93 860,72 960,46"
+        fill="none" stroke="#8A6D3B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <circle cx="60" cy="190" r="5" fill="#1F2A44"/>
+      <circle cx="160" cy="178" r="4" fill="#8A6D3B"/>
+      <circle cx="260" cy="165" r="4" fill="#8A6D3B"/>
+      <circle cx="360" cy="152" r="4" fill="#8A6D3B"/>
+      <circle cx="460" cy="135" r="4" fill="#8A6D3B"/>
+      <circle cx="560" cy="123" r="4" fill="#8A6D3B"/>
+      <circle cx="660" cy="110" r="6" fill="#1E7145"/>
+      <circle cx="760" cy="93" r="4" fill="#8A6D3B"/>
+      <circle cx="860" cy="72" r="4" fill="#8A6D3B"/>
+      <circle cx="960" cy="46" r="6" fill="#1E7145"/>
+
+      <text x="45" y="305" font-size="11" fill="#8a8a8a">Jul 26</text>
+      <text x="145" y="305" font-size="11" fill="#8a8a8a">Aug</text>
+      <text x="248" y="305" font-size="11" fill="#8a8a8a">Sep</text>
+      <text x="348" y="305" font-size="11" fill="#8a8a8a">Oct</text>
+      <text x="445" y="305" font-size="11" fill="#8a8a8a">Nov</text>
+      <text x="548" y="305" font-size="11" fill="#8a8a8a">Dec</text>
+      <text x="635" y="305" font-size="11" fill="#8A6D3B" font-weight="700">Jan 27 &#9733;</text>
+      <text x="725" y="305" font-size="11" fill="#8a8a8a">Feb&ndash;Mar</text>
+      <text x="825" y="305" font-size="11" fill="#8a8a8a">Apr&ndash;May</text>
+      <text x="925" y="305" font-size="11" fill="#1E7145" font-weight="700">Jul 27 &#9733;</text>
+    </svg>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Month</th><th>Projected combined revenue</th><th>vs. today</th><th>Primary driver</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Jul 2026 (Now)</strong></td><td><strong>$1,141,337</strong></td><td>n/a</td><td>Baseline (Treez Q2 avg)</td></tr>
+      <tr><td>Aug 2026</td><td><strong>$1,175,577</strong></td><td class="pos">+3%</td><td>GBP delivery category fixed &middot; Ahrefs Rank Tracker live</td></tr>
+      <tr><td>Sep 2026</td><td><strong>$1,209,817</strong></td><td class="pos">+6%</td><td>Delivery landing page rebuild live &middot; review push begins</td></tr>
+      <tr><td>Oct 2026</td><td><strong>$1,244,057</strong></td><td class="pos">+9%</td><td>Tracy content build indexing &middot; Google Ads launches</td></tr>
+      <tr><td>Nov 2026</td><td><strong>$1,289,711</strong></td><td class="pos">+13%</td><td>First delivery pages ranking &middot; Sunol geo page live</td></tr>
+      <tr><td>Dec 2026</td><td><strong>$1,323,951</strong></td><td class="pos">+16%</td><td>Programmatic retargeting live &middot; backlink program compounding</td></tr>
+      <tr class="milestone-1"><td><strong>Jan 2027 &#9733;</strong></td><td><strong>$1,358,191</strong></td><td class="pos">+19%</td><td><strong>Target 1: 6-month milestone</strong></td></tr>
+      <tr><td>Feb&ndash;Mar 2027</td><td><strong>$1,403,845</strong></td><td class="pos">+23%</td><td>Domain Rating climbing &middot; Tracy organic ranking top 3</td></tr>
+      <tr><td>Apr&ndash;May 2027</td><td><strong>$1,460,912</strong></td><td class="pos">+28%</td><td>Full delivery footprint live across both markets</td></tr>
+      <tr class="milestone-2"><td><strong>Jun&ndash;Jul 2027 &#9733;</strong></td><td><strong>$1,529,392</strong></td><td class="pos">+34%</td><td><strong>Target 2: 12-month milestone</strong></td></tr>
+    </tbody>
+  </table>
+  <p class="muted-note">Floor projections built on the confirmed size of each gap above (delivery visibility, Tracy's organic ranking, backlink authority) rather than blended industry averages. Faster-than-modeled SEO compounding, which is the typical pattern once a 0%-visibility gap like the delivery channel is closed, would pull both milestones forward.</p>
+
+  <!-- Monthly Investment -->
+  <div class="section-label">Monthly investment: what it costs to get there</div>
+  <div class="card-dark">
+    <div class="stat-strip cols-4">
+      <div class="stat">
+        <div class="label">Monthly recurring (Phase 1+2)</div>
+        <div class="value">$12,300</div>
+        <div class="sub">Live by month 6</div>
+      </div>
+      <div class="stat">
+        <div class="label">Blended return target</div>
+        <div class="value">~4x</div>
+        <div class="sub">Across active channels</div>
+      </div>
+      <div class="stat">
+        <div class="label">Combined revenue base</div>
+        <div class="value">$1.14M</div>
+        <div class="sub">Treez, monthly avg</div>
+      </div>
+      <div class="stat">
+        <div class="label">Phase 3 (Meta, optional)</div>
+        <div class="value">+$2,000</div>
+        <div class="sub">Not proposed before month 9</div>
+      </div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Channel</th><th>Monthly spend</th><th>Return target</th><th>Projected revenue</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="channel-name">SEO: delivery pages, Tracy catch-up, backlink program</div>
+          <div class="channel-desc">Covers both locations: GBP delivery category fix, delivery landing page rebuild, Tracy on-page and content build, Sunol/Livermore/Mountain House geo pages, and a backlink/authority program to close the Domain Rating gap. Months 1&ndash;2 are build phase; compounding from month 3 onward.</div>
+        </td>
+        <td class="spend">$6,500</td>
+        <td>4x</td>
+        <td class="revenue">$26,000<br><span style="color:#888;font-weight:400;font-size:11px;">From month 3+</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="channel-name">Google Ads: delivery &amp; dispensary intent</div>
+          <div class="channel-desc">Launches month 4, once the delivery page and GBP fixes are live. Targets "dispensary near me," "weed delivery," and branded terms across both markets.</div>
+        </td>
+        <td class="spend">$3,500</td>
+        <td>3x</td>
+        <td class="revenue">$10,500<br><span style="color:#888;font-weight:400;font-size:11px;">From month 4</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="channel-name">Programmatic retargeting</div>
+          <div class="channel-desc">Follows Google Ads by one month. Retargets goe.menu visitors and app users across both markets.</div>
+        </td>
+        <td class="spend">$1,500</td>
+        <td>3x</td>
+        <td class="revenue">$4,500<br><span style="color:#888;font-weight:400;font-size:11px;">From month 5</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="channel-name">AIQ optimization (incremental)</div>
+          <div class="channel-desc">Loyalty cashback restructure and added automation flows layered onto the AIQ program already generating $41,647/quarter, driven almost entirely by one SMS campaign today. Incremental spend on top of the existing, already-functioning base.</div>
+        </td>
+        <td class="spend">$800</td>
+        <td>Retention lift</td>
+        <td class="revenue">$3,000&ndash;$5,000<br><span style="color:#888;font-weight:400;font-size:11px;">Incremental</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="channel-name">Meta ads (Phase 3, optional)</div>
+          <div class="channel-desc">Not proposed for launch until Phase 1 and Phase 2 are proven at target return. Evaluate at the month 9 checkpoint.</div>
+        </td>
+        <td class="spend">$2,000</td>
+        <td>2&ndash;3x (est.)</td>
+        <td class="revenue">Evaluate at Month 9</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Milestone Timeline -->
+  <div class="section-label">Milestone timeline</div>
+  <div class="timeline">
+    <div class="tl-card">
+      <div class="mo">Mo 1&ndash;2 &middot; Aug&ndash;Sep 26</div>
+      <div class="headline">Foundation</div>
+      <div class="body">GBP delivery category and attributes added on both listings. Delivery landing page rebuild scoped and live. Ahrefs Rank Tracker populated for Hayward and Tracy. AIQ cashback restructure proposed.</div>
+    </div>
+    <div class="tl-card">
+      <div class="mo">Mo 3&ndash;4 &middot; Oct&ndash;Nov 26</div>
+      <div class="headline">Build</div>
+      <div class="body">Tracy content and on-page work live. Sunol, Livermore, and Mountain House geo pages built. Google Ads launches on delivery and dispensary intent. Backlink program underway.</div>
+    </div>
+    <div class="tl-card target">
+      <div class="mo">Mo 5&ndash;6 &middot; Dec 26&ndash;Jan 27</div>
+      <div class="headline gold">$1.36M: Target 1</div>
+      <div class="body">Delivery visibility measurably improved in Local Falcon scans. Tracy's organic ranking climbing. Programmatic retargeting live. Google Ads at target return.</div>
+    </div>
+    <div class="tl-card">
+      <div class="mo">Mo 7&ndash;9 &middot; Feb&ndash;Apr 27</div>
+      <div class="headline">Compounding</div>
+      <div class="body">SEO becomes the largest incremental channel as delivery and organic rankings mature. Domain Rating climbing off the backlink program. Meta ads evaluated as an optional Phase 3 add-on if Phase 1 and 2 are hitting target.</div>
+    </div>
+    <div class="tl-card target final">
+      <div class="mo">Mo 10&ndash;12 &middot; May&ndash;Jul 27</div>
+      <div class="headline green">$1.53M: Target 2</div>
+      <div class="body">Full two-location delivery and organic footprint live, including Sunol's opening. SEO carrying the majority of incremental growth. Retention program mature.</div>
+    </div>
+  </div>
+
+  <!-- Data note -->
+  <div class="note-box">
+    <strong>Data and methodology:</strong> Revenue baseline and all Treez figures are Q2 2026 (April&ndash;June) actuals pulled directly from Treez POS exports, confirmed by location. AIQ figures are the same quarter's campaign data pulled via the AIQ connector. Google Business Profile, Search Console, and Local Falcon figures are live via Windsor.ai and Local Falcon's API as of July 20, 2026. Google Analytics 4 is connected and confirms 49,824 sessions for the quarter, but purchase and transaction tracking is not yet implemented in GA4, so this model is built on Treez POS actuals rather than GA4 revenue attribution; installing that tracking is a parallel recommendation, not a dependency for this plan. Ahrefs Rank Tracker is not yet populated for Garden of Eden and should be set up alongside Phase 1 so keyword-level progress can be tracked against these targets. Let us know if there are additional data points, budget constraints, or timeline preferences to factor in before this goes final.
+  </div>
+
+  <div class="footer">
+    Nearfront | nearfront.com | <strong>Guillermo Bravo</strong> | Prepared for Ashwin Bhagat &middot; Garden of Eden &middot; goe.menu
+  </div>
+
+</div>
+</body>
+</html>
